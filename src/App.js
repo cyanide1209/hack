@@ -11,18 +11,20 @@ function App() {
   ]);
   const [sortOrder,setSortOrder] = useState(0)
   const [page,setPage] = useState(0)
+  const [search,setSearch] = useState("")
   
   useEffect(()=>{
-    apiRequest("","DESC="+sortOrder+"&PAGE="+page).then(
+    apiRequest("","DESC="+sortOrder+"&PAGE="+page+(search.length > 0 ? "&SEARCH="+search : "")).then(
     (data)=>{
       console.log(data)
       setTestData(data);
     }
-  )},[sortOrder,page]);
+  )},[sortOrder,page,search]);
   return (
     <div>
       <Header />
       <div id="GUIcont">
+        <input onChange={(e)=>{setSearch(e.target.value)}} value={search}/>
         <div onClick={()=>{setSortOrder(sortOrder ^ 1)}}>{sortOrder == "0" ? "ASC" : "DESC"}</div>
         <div><span onClick={()=>{setPage(Math.max(0,page-1))}}>← </span>{page+1}<span onClick={()=>{setPage(page+1)}}> →</span></div>
       </div>
@@ -33,6 +35,8 @@ function App() {
           <thead>
             <tr>
               <th>EIN</th>
+              <th>Charity Name</th>
+              <th>Location</th>
               <th>Overhead Cost</th>
               <th>Program Service</th>
               <th>Total Expense</th>
@@ -45,6 +49,8 @@ function App() {
               testData.map((row)=>(
               <tr id={row["id"]}>
                 <td>{row["EIN"]}</td>
+                <td>{row["charityName"]}</td>
+                <td>{row["city"]+","+row["state"]}</td>
                 <td>{row["OVERHEAD_COST"]}</td>
                 <td>{row["PRGM_SERVICE"]}</td>
                 <td>{row["TOTAL_EXPENSE"]}</td>
@@ -75,13 +81,13 @@ function Header() {
 function NavBar() {
   return(
     <div id='navBar'>
-      <div>
-        <div><u>EIN</u> - Employer ID</div><br></br>
-        <div><u>Overhead Cost</u> - expenses not directly affecting the community (ex: salaries)</div><br></br>
-        <div><u>Program Service</u> - expenses associated with helping the community</div><br></br>
-        <div><u>Total Expenses</u> - total money spent</div><br></br>
-        <div><u>Total Revenue</u> - total money made</div><br></br>
-        <div><u>Ratio</u> - Overhead/total expenses</div><br></br>
+      <div id="navTop">
+        <div><u>EIN</u> - Employer ID</div>
+        <div><u>Overhead Cost</u> - expenses not directly affecting the community (ex: salaries)</div>
+        <div><u>Program Service</u> - expenses associated with helping the community</div>
+        <div><u>Total Expenses</u> - total money spent</div>
+        <div><u>Total Revenue</u> - total money made</div>
+        <div><u>Ratio</u> - Overhead/total expenses</div>
         <div>
           (The higher the ratio, the more the charity is spending on their programs as opposed to overhead)
         </div>

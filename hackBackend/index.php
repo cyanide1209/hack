@@ -6,10 +6,12 @@
 
     $sort = "ASC";
     $left = 0;
+    $restraint = "";
     if(!empty($_GET["DESC"])) $sort = "DESC";
     if(!empty($_GET["PAGE"])) $left = $_GET["PAGE"];
-
-    $que = "SELECT * FROM charityInfo 
+    if(!empty($_GET["SEARCH"])) $restraint = " WHERE charityName LIKE '".$_GET["SEARCH"]."%' ";
+    
+    $que = "SELECT * FROM charityInfo ".$restraint."
             ORDER BY RATIO $sort
             LIMIT 100 OFFSET ".($left * 100);
     $res = $conn->query($que);
