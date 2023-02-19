@@ -1,4 +1,4 @@
-# hack4hmanity 2023
+# hack4humanity 2023
 
 #Purpose:
   #the objective of this hackathon project was to analyze how how efficient each nonprofit charity is in America through an analysis of the IRS Form 990s.
